@@ -9,17 +9,62 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
-library(tidyverse) # load libraries
+# Load and Clean the Data
+The first step in our analysis is to load and clean the dataset using TidyVerse. For this, we'd analyze the age and party affiliation of Congress members. The main parties of interest are Democratic (100), Republican (200), and Independent (328). Party codes can be found at [VoteView.com](https://voteview.com/articles/data_help_parties).
 
+```{r foundation}
+library(tidyverse) 
 
-congressage_raw <- read_csv("https://raw.githubusercontent.com/fivethirtyeight/data/refs/heads/master/congress-demographics/data_aging_congress.csv") # load the dataset
+# Load data
+congressage_raw <- read_csv("https://raw.githubusercontent.com/fivethirtyeight/data/refs/heads/master/congress-demographics/data_aging_congress.csv")   # read_csv 
+
+# View raw data
 head(congressage_raw)
 
+# Clean data
+congressage_clean <- congressage_raw %>%
+  select(age_years, party_code) %>%     # select
+  drop_na()        # drop_na()
 
-ggplot(congressage_raw, aes(x = age_years, y = party_code)) +  # create a simple plot
-  geom_point() +
-  labs(title = "Age vs Party")   
-  labs(title = "Age vs Party")
+# View clean data
+head(congressage_clean)        # view first 6
 ```
 
+# Visualize Age vs. Party Affiliation
+Next, we create a scatter plot to visualize the relationship between age and party affiliation.
+
+```{r visualization}
+# Scatter plot of age vs party
+ggplot(congressage_clean, aes(x = age_years, y = party_code)) +         # ggplot scatter plot
+  geom_point() +
+  labs(title = "Age vs Party Affiliation", x = "Age", y = "Party")
+```
+
+# Compute Summary Stat by Party
+After visualizing the data, it's useful to compute the average age of all members in order to have a single measure. 
+
+```{r summary}
+# Mean stat by party
+age_summary <- congressage_clean %>%            
+  group_by(party_code) %>%          # group and summarize
+  summarize(
+    mean_age = mean(age_years),
+  )
+
+# View summary
+age_summary
+```
+
+# Visualize Mean Age by Party
+Finally, we create a scatter plot of the average age for each party to easily compare with other represented parties. 
+
+```{r mean age plot}
+# Scatter plot of mean age vs party
+ggplot(age_summary, aes(x = party_code, y = mean_age)) +      # plot scatter plot with ggplot
+  geom_point() + 
+  labs(title = "Age vs Party Affiliation", x = "Party", y = "Mean Age")
+```
+
+# Conclusion
+
+This vignette loads, cleans, and visualizes the data using TidyVerse to show the relationship between age and party affiliation. 
