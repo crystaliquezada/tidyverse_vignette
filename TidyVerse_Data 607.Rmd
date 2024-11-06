@@ -19,6 +19,6 @@ head(congressage_raw)
 
 ggplot(congressage_raw, aes(x = age_years, y = party_code)) +  # create a simple plot
   geom_point() +
-  labs(title = "Age vs Party")
+  labs(title = "Age vs Party")   
 ```
 
