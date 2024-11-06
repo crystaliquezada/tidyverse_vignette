@@ -1,0 +1,24 @@
+---
+title: "TidyVerse Create_Data 607"
+author: "Crystal Quezada"
+date: "2024-11-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse) # load libraries
+
+
+congressage_raw <- read_csv("https://raw.githubusercontent.com/fivethirtyeight/data/refs/heads/master/congress-demographics/data_aging_congress.csv") # load the dataset
+head(congressage_raw)
+
+
+ggplot(congressage_raw, aes(x = age_years, y = party_code)) +  # create a simple plot
+  geom_point() +
+  labs(title = "Age vs Party")
+```
+
